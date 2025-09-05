@@ -9,6 +9,7 @@ import {
 import { SectionEnum, SectionRangeEnum } from "../../common/enums/enums";
 import { SectionAudio } from "../../section-audios/entities/section-audio.entity";
 import { SectionSubGroup } from "../../section-sub-groups/entities/section-sub-group.entity";
+import { SubGroupQuestion } from "../../sub-group-questions/entities/sub-group-question.entity";
 
 @Entity("sections")
 export class Section {
@@ -50,5 +51,11 @@ export class Section {
     (section_sub_group) => section_sub_group.section,
     { nullable: true, onDelete: "CASCADE" }
   )
-  section_sub_group: SectionSubGroup;
+  section_sub_group: SectionSubGroup[];
+
+  @OneToMany(() => SubGroupQuestion, (question) => question.section, {
+    nullable: true,
+    onDelete: "CASCADE",
+  })
+  question: SubGroupQuestion[];
 }

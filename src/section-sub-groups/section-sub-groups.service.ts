@@ -1,4 +1,10 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { CreateSectionSubGroupDto } from "./dto/create-section-sub-group.dto";
 import { UpdateSectionSubGroupDto } from "./dto/update-section-sub-group.dto";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -12,9 +18,12 @@ export class SectionSubGroupsService {
   constructor(
     @InjectRepository(SectionSubGroup)
     private readonly sectionSubGroupRepo: Repository<SectionSubGroup>,
+    @Inject(forwardRef(() => SectionsService))
     private readonly sectionService: SectionsService
   ) {}
   async create(createSectionSubGroupDto: CreateSectionSubGroupDto) {
+    console.log(createSectionSubGroupDto, "createSectionSubGroupDto");
+
     const isExist = await this.sectionSubGroupRepo.findOne({
       where: { section: { id: createSectionSubGroupDto.sectionId } },
     });
@@ -25,12 +34,6 @@ export class SectionSubGroupsService {
     }
     const { data: section } = await this.sectionService.findOne(
       createSectionSubGroupDto.sectionId
-    );
-    console.log(createSectionSubGroupDto.sub_groups[0].question_start);
-    console.log(
-      createSectionSubGroupDto.sub_groups[
-        createSectionSubGroupDto.sub_groups.length - 1
-      ].question_end
     );
     if (section.section_range)
       for (let i = 0; i < createSectionSubGroupDto.sub_groups.length - 1; i++) {
@@ -59,20 +62,58 @@ export class SectionSubGroupsService {
     };
   }
 
-  findAll() {
-    return `This action returns all sectionSubGroups`;
+  async findAll(): Promise<SectionSubGroup[]> {
+    const sectionSubGroups = await this.sectionSubGroupRepo.find({
+      relations: ["section"], // Load related section if needed
+    });
+    return sectionSubGroups;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} sectionSubGroup`;
+  async findOne(id: number): Promise<SectionSubGroup> {
+    const sectionSubGroup = await this.sectionSubGroupRepo.findOne({
+      where: { id },
+      relations: ["section"], // Load related section if needed
+    });
+
+    if (!sectionSubGroup) {
+      throw new NotFoundException(`SectionSubGroup with ID ${id} not found`);
+    }
+
+    return sectionSubGroup;
   }
 
-  update(id: number, updateSectionSubGroupDto: UpdateSectionSubGroupDto) {
-    return `This action updates a #${id} sectionSubGroup`;
+  async update(
+    id: number,
+    updateSectionSubGroupDto: UpdateSectionSubGroupDto
+  ): Promise<SectionSubGroup> {
+    const sectionSubGroup = await this.sectionSubGroupRepo.preload({
+      id,
+      ...updateSectionSubGroupDto,
+    });
+
+    if (!sectionSubGroup) {
+      throw new NotFoundException(`SectionSubGroup with ID ${id} not found`);
+    }
+
+    // Handle section relationship if section_id is provided
+    if (updateSectionSubGroupDto.sectionId) {
+      const { data: section } = await this.sectionService.findOne(
+        updateSectionSubGroupDto.sectionId
+      );
+      if (!section) {
+        throw new NotFoundException(
+          `Section with ID ${updateSectionSubGroupDto.sectionId} not found`
+        );
+      }
+      sectionSubGroup.section = section;
+    }
+
+    return this.sectionSubGroupRepo.save(sectionSubGroup);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} sectionSubGroup`;
+  async remove(id: number): Promise<void> {
+    const sectionSubGroup = await this.findOne(id); // Reuse findOne to check existence
+    await this.sectionSubGroupRepo.remove(sectionSubGroup);
   }
 
   private validateSubGroups(sectionRange: SectionRangeEnum, subGroups: any[]) {

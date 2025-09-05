@@ -19,18 +19,16 @@ export enum SectionRangeEnum {
 
 // Listening Question Types in IELTS
 export enum ListeningQuestionType {
-  MULTIPLE_CHOICE = "MULTIPLE_CHOICE", // Example: Choose the correct answer A, B, or C
-  MATCHING = "MATCHING", // Example: Match the speakers with the topics discussed
-  PLAN_MAP_DIAGRAM_LABELING = "PLAN_MAP_DIAGRAM_LABELING",
-  // Example: Label the parts of a map, building, or diagram
-
-  FORM_COMPLETION = "FORM_COMPLETION", // Example: Complete the registration form with missing words
-  NOTE_COMPLETION = "NOTE_COMPLETION", // Example: Complete lecture notes with no more than TWO words
-  TABLE_COMPLETION = "TABLE_COMPLETION", // Example: Fill in a table about train schedules
-  FLOWCHART_COMPLETION = "FLOWCHART_COMPLETION",
-  // Example: Complete the stages in a process flowchart
-  SUMMARY_COMPLETION = "SUMMARY_COMPLETION", // Example: Complete a short summary of a talk
-
-  SENTENCE_COMPLETION = "SENTENCE_COMPLETION", // Example: Complete the sentence with one word
-  SHORT_ANSWER = "SHORT_ANSWER", // Example: Answer the question in no more than THREE words
+  MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
+  // Example: You will hear a conversation between a student and a librarian about borrowing books. Choose the correct answer (A, B, or C). What is the maximum number of books the student can borrow? A) 3 B) 5 C) 7 (Answer: B) 5)
+  MATCHING = "MATCHING",
+  // Example: You will hear a tour guide talking about different attractions in a city. Match the attractions (1-4) to the features they offer (A-F). 1. Museum 2. Zoo 3. Park 4. Theater A) Live performances B) Animal exhibits C) Historical artifacts D) Guided tours E) Picnic areas F) Art galleries (Answers: 1. C, 2. B, 3. E, 4. A)
+  LABELING = "LABELING", 
+  // Example: You will hear a description of a university campus. Label the map below with the correct locations (A-D). A) Library B) Cafeteria C) Lecture Hall D) Sports Center
+  COMPLETION = "COMPLETION",
+  // Example: You will hear a lecture about climate change. Complete the notes below. Climate change is caused by ___ (e.g., greenhouse gases) and leads to ___ (e.g., rising temperatures).
+  SENTENCE_COMPLETION = "SENTENCE_COMPLETION",
+  // Example: You will hear a conversation about a job interview. Complete the sentence. The interview is scheduled for ___ (e.g., next Monday at 10 a.m.).
+  SHORT_ANSWER = "SHORT_ANSWER",
+  // Example: You will hear a guide explaining a museum tour. Answer the question. What is the main exhibit? (Answer: Ancient Egyptian artifacts)
 }

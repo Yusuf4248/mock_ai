@@ -12,7 +12,11 @@ import { SectionAudiosModule } from "./section-audios/section-audios.module";
 import { FileModule } from "./file/file.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
-import { SectionSubGroupsModule } from './section-sub-groups/section-sub-groups.module';
+import { SectionSubGroupsModule } from "./section-sub-groups/section-sub-groups.module";
+import { SubGroupQuestionsModule } from "./sub-group-questions/sub-group-questions.module";
+import { DataSource } from "typeorm";
+import { AnswersModule } from "./answers/answers.module";
+import { QuestionOptionsModule } from "./question-options/question-options.module";
 
 @Module({
   imports: [
@@ -27,6 +31,11 @@ import { SectionSubGroupsModule } from './section-sub-groups/section-sub-groups.
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", "uploads", "audios"),
+      serveRoot: "/audios",
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, "..", "uploads", "photos"),
+      serveRoot: "/photos",
     }),
     TypeOrmModule.forRoot({
       type: "postgres",
@@ -48,8 +57,13 @@ import { SectionSubGroupsModule } from './section-sub-groups/section-sub-groups.
     SectionAudiosModule,
     FileModule,
     SectionSubGroupsModule,
+    SubGroupQuestionsModule,
+    AnswersModule,
+    QuestionOptionsModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}

@@ -5,9 +5,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   JoinColumn,
+  OneToMany,
 } from "typeorm";
 import { ListeningQuestionType } from "../../common/enums/enums";
 import { Section } from "../../sections/entities/section.entity";
+import { SubGroupQuestion } from "../../sub-group-questions/entities/sub-group-question.entity";
 
 @Entity("section-sub-groups")
 export class SectionSubGroup {

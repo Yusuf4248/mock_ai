@@ -6,12 +6,13 @@ import {
   IsEnum,
   Min,
   Max,
+  IsOptional,
 } from "class-validator";
 import { Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
 import { ListeningQuestionType } from "../../common/enums/enums";
 
-class CreateSectionSubGroupItemDto {
+export class CreateSectionSubGroupItemDto {
   @ApiProperty({
     example: 1,
     description: "The starting number of the question range (e.g., 1)",
@@ -52,6 +53,7 @@ export class CreateSectionSubGroupDto {
     description: "The ID of the parent Section (foreign key)",
   })
   @IsInt()
+  @IsOptional()
   sectionId: number;
 
   @ApiProperty({

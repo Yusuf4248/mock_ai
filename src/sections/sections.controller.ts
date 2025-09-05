@@ -22,7 +22,11 @@ import {
   ApiQuery,
   ApiConsumes,
 } from "@nestjs/swagger";
-import { SectionEnum, SectionRangeEnum } from "../common/enums/enums";
+import {
+  ListeningQuestionType,
+  SectionEnum,
+  SectionRangeEnum,
+} from "../common/enums/enums";
 import { FileInterceptor } from "@nestjs/platform-express";
 
 @ApiTags("Sections")
@@ -41,20 +45,39 @@ export class SectionsController {
   })
   @ApiResponse({ status: 400, description: "Bad request." })
   @ApiBody({
-    required: true,
     schema: {
       type: "object",
       properties: {
-        section_number: { type: "string", enum: Object.values(SectionEnum) },
-        section_title: { type: "string" },
+        section_number: {
+          type: "string",
+          enum: Object.values(SectionEnum),
+          example: SectionEnum.PART_ONE,
+        },
+        section_title: { type: "string", example: "Listening Section" },
         section_range: {
           type: "string",
           enum: Object.values(SectionRangeEnum),
+          example: SectionRangeEnum.RANGE1,
         },
         audio: {
           type: "string",
           format: "binary",
-          description: "Audio file to upload (MP3, WAV, etc.)",
+        },
+        sub_groups: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              question_start: { type: "number", example: 1 },
+              question_end: { type: "number", example: 10 },
+              sub_title: { type: "string", example: "Listening Part 1" },
+              question_type: {
+                type: "string",
+                enum: Object.values(ListeningQuestionType),
+                example: ListeningQuestionType.MULTIPLE_CHOICE,
+              },
+            },
+        },
         },
       },
     },
