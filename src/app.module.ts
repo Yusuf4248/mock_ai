@@ -17,6 +17,7 @@ import { SubGroupQuestionsModule } from "./sub-group-questions/sub-group-questio
 import { DataSource } from "typeorm";
 import { AnswersModule } from "./answers/answers.module";
 import { QuestionOptionsModule } from "./question-options/question-options.module";
+import { QuestionBlanksModule } from './question-blanks/question-blanks.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { QuestionOptionsModule } from "./question-options/question-options.modul
     SubGroupQuestionsModule,
     AnswersModule,
     QuestionOptionsModule,
+    QuestionBlanksModule,
   ],
   controllers: [],
   providers: [],

@@ -6,10 +6,11 @@ import { SubGroupQuestion } from "./entities/sub-group-question.entity";
 import { SectionsModule } from "../sections/sections.module";
 import { FileModule } from "../file/file.module";
 import { QuestionOption } from "../question-options/entities/question-option.entity";
+import { QuestionBlank } from "../question-blanks/entities/question-blank.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([SubGroupQuestion, QuestionOption]),
+    TypeOrmModule.forFeature([SubGroupQuestion, QuestionOption, QuestionBlank]),
     SectionsModule,
     FileModule,
   ],

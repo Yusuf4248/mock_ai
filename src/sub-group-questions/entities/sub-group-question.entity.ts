@@ -10,6 +10,7 @@ import { Section } from "../../sections/entities/section.entity";
 import { ListeningQuestionType } from "../../common/enums/enums";
 import { Answer } from "../../answers/entities/answer.entity";
 import { QuestionOption } from "../../question-options/entities/question-option.entity";
+import { QuestionBlank } from "../../question-blanks/entities/question-blank.entity";
 
 @Entity("sub-group-questions")
 export class SubGroupQuestion {
@@ -42,6 +43,16 @@ export class SubGroupQuestion {
   @Column({ type: "text" })
   question_text: string;
 
+  @Column({ type: "text", nullable: true })
+  description: string;
+
+  @ApiProperty({
+    example: "Paris",
+    description: "Correct answer for question",
+  })
+  @Column({ type: "varchar", nullable: true })
+  answer: string;
+
   @ApiProperty({
     example: "https://example.com/photo.jpg",
     description: "Optional photo related to the question",
@@ -61,13 +72,6 @@ export class SubGroupQuestion {
   })
   section: Section;
 
-  @ApiProperty({
-    example: "Paris",
-    description: "Correct answer for question",
-  })
-  @Column({ type: "varchar", nullable: true })
-  answer: string;
-
   @OneToMany(() => Answer, (answer) => answer.subGroupQuestion, {
     nullable: true,
     onDelete: "CASCADE",
@@ -83,4 +87,9 @@ export class SubGroupQuestion {
     }
   )
   question_option: QuestionOption[];
+
+  @OneToMany(() => QuestionBlank, (blank) => blank.subGroupQuestion, {
+    cascade: true,
+  })
+  question_blanks: QuestionBlank[];
 }

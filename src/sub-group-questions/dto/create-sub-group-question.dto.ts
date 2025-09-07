@@ -58,15 +58,6 @@ export class CreateSubGroupQuestionDto {
   answer: string;
 
   @ApiProperty({
-    example: "https://example.com/photo.jpg",
-    description: "Optional photo related to the question (path after upload)",
-    required: false,
-  })
-  @IsString()
-  @IsOptional()
-  photo?: string;
-
-  @ApiProperty({
     example: 1,
     description: "ID of the section this question belongs to",
     required: false,
@@ -74,6 +65,9 @@ export class CreateSubGroupQuestionDto {
   @IsInt()
   @Type(() => Number)
   sectionId: number;
+
+  @IsInt()
+  photoIndex: number;
 
   @ApiProperty({
     example: [
