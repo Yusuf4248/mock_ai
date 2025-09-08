@@ -9,13 +9,12 @@ import { UpdateSectionDto } from "./dto/update-section.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Section } from "./entities/section.entity";
 import { DataSource, Repository } from "typeorm";
-import { SectionAudiosService } from "../section-audios/section-audios.service";
-import { SectionSubGroupsService } from "../section-sub-groups/section-sub-groups.service";
 import * as path from "path";
 import { FileService } from "../file/file.service";
 import { CreateSectionSubGroupDto } from "../section-sub-groups/dto/create-section-sub-group.dto";
 import { SectionSubGroup } from "../section-sub-groups/entities/section-sub-group.entity";
 import { SectionAudio } from "../section-audios/entities/section-audio.entity";
+import { SectionEnum, SectionRangeEnum } from "../common/enums/enums";
 
 @Injectable()
 export class SectionsService {
@@ -23,9 +22,7 @@ export class SectionsService {
     private readonly dataSource: DataSource,
     private readonly fileService: FileService,
     @InjectRepository(Section)
-    private readonly sectionRepo: Repository<Section>,
-    private readonly sectionAudioService: SectionAudiosService,
-    private readonly sectionSubGroupsService: SectionSubGroupsService
+    private readonly sectionRepo: Repository<Section>
   ) {}
 
   async create(createSectionDto: CreateSectionDto, audio: File) {
@@ -35,6 +32,18 @@ export class SectionsService {
     await queryRunner.startTransaction(); // Tranzaksiyani boshlash
 
     try {
+      // SectionEnum -> SectionRangeEnum mapping qilish
+      const sectionRangeMap: Record<SectionEnum, SectionRangeEnum> = {
+        [SectionEnum.PART_ONE]: SectionRangeEnum.RANGE1,
+        [SectionEnum.PART_TWO]: SectionRangeEnum.RANGE2,
+        [SectionEnum.PART_THREE]: SectionRangeEnum.RANGE3,
+        [SectionEnum.PART_FOUR]: SectionRangeEnum.RANGE4,
+      };
+
+      const sectionRange = sectionRangeMap[createSectionDto.section_number];
+      if (!sectionRange) {
+        throw new BadRequestException("Invalid section part!");
+      }
       // 1. Section saqlash
       const newSection = await queryRunner.manager.save(
         Section,

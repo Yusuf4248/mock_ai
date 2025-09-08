@@ -1,9 +1,4 @@
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsString,
-  IsOptional,
-} from "class-validator";
+import { IsEnum, IsNotEmpty, IsString, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform, Type } from "class-transformer";
 import { SectionEnum, SectionRangeEnum } from "../../common/enums/enums";
@@ -26,15 +21,6 @@ export class CreateSectionDto {
   @IsString()
   @IsNotEmpty()
   section_title: string;
-
-  @ApiProperty({
-    example: SectionRangeEnum.RANGE1,
-    description: "Section question range",
-    enum: SectionRangeEnum,
-  })
-  @IsEnum(SectionRangeEnum)
-  @IsNotEmpty()
-  section_range: SectionRangeEnum;
 
   @ApiProperty({
     description:

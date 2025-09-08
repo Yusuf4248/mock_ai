@@ -54,11 +54,6 @@ export class SectionsController {
           example: SectionEnum.PART_ONE,
         },
         section_title: { type: "string", example: "Listening Section" },
-        section_range: {
-          type: "string",
-          enum: Object.values(SectionRangeEnum),
-          example: SectionRangeEnum.RANGE1,
-        },
         audio: {
           type: "string",
           format: "binary",
